@@ -10,21 +10,41 @@ using std::ifstream;
 using std::ofstream;
 using std::vector;
 
+vector<string> read_all_lines(string file_name);
+void write_all_lines(string file_name, vector<string> lines);
+
 int main() {
-    ifstream inputFile("example.txt"); // Dateiname zum Lesen
-    vector<string> lines;
+    auto content = read_all_lines("text.txt");
+    write_all_lines("example.txt", content);
+    return 0;
+}
 
-    if (inputFile.is_open()) {
+vector<string> read_all_lines(string file_name) {
+    ifstream file(file_name);
+    vector<string> content;
+
+    if(file.is_open()) {
         string line;
-
-        while (getline(inputFile, line)) { // Datei Zeile für Zeile lesen
-            cout << line << endl;
-            lines.push_back(line); // Zeile in Vektor schreiben
+        while (getline(file, line)) {
+            content.push_back(line); // Zeile in Vektor schreiben
         }
 
-        inputFile.close(); // Datei schließen
+        file.close();
+    } else { cout << "Datei konnte nicht geöffnet werden." << endl; }
+
+    return content;
+}
+
+void write_all_lines(string file_name, vector<string> lines) {
+    ofstream file(file_name);
+
+    if(file.is_open()) {
+        for (auto l: lines) {
+            file << l << "\n";
+        }
+        file.close();
     } else {
         cout << "Datei konnte nicht geöffnet werden." << endl;
     }
-    return 0;
+
 }
